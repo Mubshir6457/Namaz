@@ -3,505 +3,1674 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Faizan-e-Raza Madarsa Attendance System</title>
+<title>Faizan-e-Raza Madarsa Management System</title>
 <style>
-body{font-family:Arial,sans-serif;background:#f5fff5;margin:0;padding:0;}
-header{background:linear-gradient(to right,#228b22,#d4af37);color:white;text-align:center;padding:1rem;font-size:1.4rem;font-weight:bold;}
-nav{display:flex;justify-content:center;flex-wrap:wrap;background:#e8f5e9;border-bottom:2px solid #c5e1a5;}
-nav button{margin:5px;padding:10px 18px;border:none;background:#2e7d32;color:white;border-radius:5px;cursor:pointer;}
-nav button:hover{background:#1b5e20;}
-section{display:none;padding:20px;}
-.active{display:block;}
-input,select{width:100%;padding:8px;margin-top:5px;border:1px solid #ccc;border-radius:5px;}
-.btn{background:#388e3c;color:white;border:none;padding:8px 14px;border-radius:5px;cursor:pointer;margin-top:5px;}
-.btn:hover{background:#2e7d32;}
-.btn-danger{background:#d32f2f;}
-.btn-danger:hover{background:#b71c1c;}
-.btn-pay{background:#1976d2;}
-.btn-pay:hover{background:#1565c0;}
-.btn-info{background:#0288d1;}
-.btn-info:hover{background:#01579b;}
-.btn-warning{background:#f57c00;}
-.btn-warning:hover{background:#e65100;}
-table{width:100%;border-collapse:collapse;margin-top:10px;}
-th,td{border:1px solid #ccc;padding:8px;text-align:center;}
-th{background:#c8e6c9;}
-.hidden{display:none;}
-.attendance-methods{margin:15px 0;padding:15px;background:#e8f5e9;border-radius:8px;}
-.method-btn{width:100%;margin:5px 0;padding:12px;}
-.status-btns{display:flex;gap:10px;margin:10px 0;}
-.status-btn{flex:1;padding:10px;}
-.present{background:#4caf50;}
-.absent{background:#f44336;}
-.quick-actions{margin:10px 0;}
-.bulk-actions{margin:15px 0;padding:10px;background:#fff3e0;border-radius:5px;}
-.public-summary{background:#e3f2fd;padding:15px;border-radius:8px;margin:10px 0;}
-.summary-item{margin:5px 0;font-size:16px;}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f5fff5 0%, #e8f5e9 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(to right, #228b22, #d4af37);
+    color: white;
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: bold;
+    position: relative;
+}
+
+header::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(to right, #d4af37, #228b22);
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    background: #e8f5e9;
+    border-bottom: 2px solid #c5e1a5;
+    padding: 10px;
+}
+
+nav button {
+    margin: 5px;
+    padding: 12px 20px;
+    border: none;
+    background: #2e7d32;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav button:hover {
+    background: #1b5e20;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.15);
+}
+
+section {
+    display: none;
+    padding: 25px;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.active {
+    display: block;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #2e7d32;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
+}
+
+.btn {
+    background: #388e3c;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+    background: #2e7d32;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-danger {
+    background: #d32f2f;
+}
+
+.btn-danger:hover {
+    background: #b71c1c;
+}
+
+.btn-success {
+    background: #388e3c;
+}
+
+.btn-success:hover {
+    background: #2e7d32;
+}
+
+.btn-info {
+    background: #0288d1;
+}
+
+.btn-info:hover {
+    background: #01579b;
+}
+
+.btn-warning {
+    background: #f57c00;
+}
+
+.btn-warning:hover {
+    background: #e65100;
+}
+
+.btn-secondary {
+    background: #6c757d;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+.btn-present {
+    background: #4caf50;
+}
+
+.btn-present:hover {
+    background: #45a049;
+}
+
+.btn-absent {
+    background: #f44336;
+}
+
+.btn-absent:hover {
+    background: #da190b;
+}
+
+.btn-pay {
+    background: #2196f3;
+    padding: 8px 15px;
+    font-size: 14px;
+}
+
+.btn-pay:hover {
+    background: #1976d2;
+}
+
+.btn-paid {
+    background: #4caf50;
+    padding: 8px 15px;
+    font-size: 14px;
+    cursor: not-allowed;
+}
+
+.btn-paid:hover {
+    background: #45a049;
+}
+
+.btn-delete-all {
+    background: #d32f2f;
+    margin-top: 15px;
+}
+
+.btn-delete-all:hover {
+    background: #b71c1c;
+}
+
+.btn-public {
+    background: #9c27b0;
+}
+
+.btn-public:hover {
+    background: #7b1fa2;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+th {
+    background: #c8e6c9;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f8e9;
+}
+
+.hidden {
+    display: none;
+}
+
+.attendance-section, .payment-section, .report-section, .leave-section, .public-section {
+    background: #e8f5e9;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 15px 0;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.quick-actions {
+    margin: 15px 0;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.quick-action-btn {
+    flex: 1;
+    min-width: 150px;
+}
+
+.attendance-list {
+    margin-top: 20px;
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.status-present {
+    background: #4caf50;
+    color: white;
+}
+
+.status-absent {
+    background: #f44336;
+    color: white;
+}
+
+.payment-form, .leave-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.public-form {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.flash-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    background: #4caf50;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    animation: slideIn 0.5s ease, fadeOut 0.5s ease 2.5s forwards;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; visibility: hidden; }
+}
+
+.password-toggle {
+    position: relative;
+}
+
+.password-toggle input {
+    padding-right: 40px;
+}
+
+.password-toggle .toggle-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+}
+
+.empty-all-btn {
+    background: #ff9800;
+    margin-top: 15px;
+}
+
+.empty-all-btn:hover {
+    background: #f57c00;
+}
+
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.attendance-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+.stat-label {
+    color: #666;
+    margin-top: 5px;
+}
+
+.fine-amount {
+    color: #d32f2f;
+    font-weight: bold;
+}
+
+.fine-paid {
+    color: #4caf50;
+    font-weight: bold;
+}
+
+.leave-approved {
+    color: #4caf50;
+    font-weight: bold;
+}
+
+.confirmation-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.confirmation-box {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+}
+
+.confirmation-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.confirmation-buttons button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.confirm-btn {
+    background: #d32f2f;
+    color: white;
+}
+
+.confirm-btn:hover {
+    background: #b71c1c;
+}
+
+.cancel-btn {
+    background: #6c757d;
+    color: white;
+}
+
+.cancel-btn:hover {
+    background: #5a6268;
+}
+
+.public-summary {
+    background: #e3f2fd;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 15px 0;
+}
+
+.summary-item {
+    margin: 10px 0;
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.summary-item b {
+    color: #2e7d32;
+}
+
+@media (max-width: 768px) {
+    .payment-form, .leave-form {
+        grid-template-columns: 1fr;
+    }
+    
+    .public-form {
+        grid-template-columns: 1fr;
+    }
+    
+    nav button {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+    
+    section {
+        padding: 15px;
+    }
+    
+    .quick-actions {
+        flex-direction: column;
+    }
+    
+    .confirmation-buttons {
+        flex-direction: column;
+    }
+}
 </style>
 </head>
 <body>
 
-<header>🕌 Faizan-e-Raza Madarsa Attendance Portal</header>
+<div class="container">
+    <header>🕌 Faizan-e-Raza Madarsa Management System</header>
 
-<nav>
-  <button onclick="showSection('loginSection')">Admin Login</button>
-  <button id="studentBtn" class="hidden" onclick="showSection('addStudentSection')">Add / Delete Student</button>
-  <button id="attendanceBtn" class="hidden" onclick="showSection('attendanceSection')">Mark Attendance</button>
-  <button id="reportBtn" class="hidden" onclick="showSection('reportSection')">View Report</button>
-  <button id="logoutBtn" class="hidden" onclick="adminLogout()">Logout</button>
-  <button onclick="showSection('publicViewSection')">📅 Public Attendance</button>
-</nav>
+    <nav>
+        <button onclick="showSection('loginSection')">Admin Login</button>
+        <button id="studentBtn" class="hidden" onclick="showSection('addStudentSection')">Add / Delete Student</button>
+        <button id="attendanceBtn" class="hidden" onclick="showSection('attendanceSection')">Mark Attendance</button>
+        <button id="paymentBtn" class="hidden" onclick="showSection('paymentSection')">Payment Management</button>
+        <button id="reportBtn" class="hidden" onclick="showSection('reportSection')">View Report</button>
+        <button id="logoutBtn" class="hidden" onclick="adminLogout()">Logout</button>
+        <button class="btn-public" onclick="showSection('publicViewSection')">👨‍👩‍👧‍👦 Public View</button>
+    </nav>
 
-<!-- 🔐 Admin Login -->
-<section id="loginSection" class="active">
-  <h2>Admin Login</h2>
-  <input type="password" id="adminCode" placeholder="Enter Admin Code">
-  <button class="btn" onclick="adminLogin()">Login</button>
-  <p id="loginMsg"></p>
-</section>
+    <!-- 🔐 Admin Login -->
+    <section id="loginSection" class="active">
+        <h2>Admin Login</h2>
+        <div class="password-toggle">
+            <input type="password" id="adminCode" placeholder="Enter Admin Code">
+            <span class="toggle-icon" onclick="togglePasswordVisibility()">👁️</span>
+        </div>
+        <button class="btn" onclick="adminLogin()">Login</button>
+        <p id="loginMsg"></p>
+    </section>
 
-<!-- 🧑‍🎓 Add / Delete Student -->
-<section id="addStudentSection">
-  <h2>Manage Students</h2>
-  <input type="text" id="studentName" placeholder="Student Name">
-  <input type="text" id="studentRoll" placeholder="Roll Number">
-  <button class="btn" onclick="addStudent()">➕ Add Student</button>
-  <p id="msg"></p>
-  <h3>Existing Students</h3>
-  <div id="studentTable"></div>
-  <button class="btn" onclick="loadStudentList()">🔄 Refresh List</button>
-</section>
+    <!-- 🧑‍🎓 Add / Delete Student -->
+    <section id="addStudentSection">
+        <h2>Manage Students</h2>
+        <input type="text" id="studentName" placeholder="Student Name">
+        <input type="text" id="studentRoll" placeholder="Roll Number">
+        <button class="btn" onclick="addStudent()">➕ Add Student</button>
+        <p id="msg"></p>
+        <h3>Existing Students</h3>
+        <div id="studentTable"></div>
+        <button class="btn" onclick="loadStudentList()">🔄 Refresh List</button>
+    </section>
 
-<!-- ✅ Mark Attendance -->
-<section id="attendanceSection">
-  <h2>Mark Attendance - Advanced Methods</h2>
-  <input type="date" id="attDate" value="">
-  
-  <div class="attendance-methods">
-    <h3>📋 Attendance Methods</h3>
-    
-    <!-- Method 1: Traditional List -->
-    <button class="btn method-btn" onclick="loadTraditionalMethod()">
-      📝 Traditional List Method
-    </button>
-    
-    <!-- Method 2: Quick Mark All -->
-    <button class="btn btn-info method-btn" onclick="loadQuickMarkMethod()">
-      ⚡ Quick Mark All Method
-    </button>
-    
-    <!-- Method 3: Roll Number Based -->
-    <button class="btn btn-warning method-btn" onclick="loadRollNumberMethod()">
-      🔢 Roll Number Input Method
-    </button>
-  </div>
+    <!-- ✅ Mark Attendance -->
+    <section id="attendanceSection">
+        <h2>📅 Mark Attendance - Quick Method</h2>
+        
+        <div class="attendance-section">
+            <h3>Select Date</h3>
+            <input type="date" id="attendanceDate" value="">
+        </div>
 
-  <!-- Traditional Method -->
-  <div id="traditionalMethod" class="hidden">
-    <h4>Traditional List Method</h4>
-    <button class="btn" onclick="loadStudentsForAttendance()">Load Students List</button>
-    <div id="studentList"></div>
-  </div>
+        <!-- Application Leave Section -->
+        <div class="leave-section">
+            <h3>📝 Application Leave (No Fine)</h3>
+            <div class="leave-form">
+                <select id="leaveStudent">
+                    <option value="">Select Student</option>
+                </select>
+                <input type="date" id="leaveDate" value="">
+                <input type="text" id="leaveReason" placeholder="Leave Reason">
+                <button class="btn btn-success" onclick="addApplicationLeave()">➕ Add Leave</button>
+            </div>
+            <div id="leaveList"></div>
+        </div>
 
-  <!-- Quick Mark Method -->
-  <div id="quickMarkMethod" class="hidden">
-    <h4>Quick Mark All Method</h4>
-    <div class="quick-actions">
-      <button class="btn present" onclick="markAllPresent()">✅ Mark All Present</button>
-      <button class="btn absent" onclick="markAllAbsent()">❌ Mark All Absent</button>
-    </div>
-    <div id="quickMarkList"></div>
-  </div>
+        <div class="attendance-section">
+            <h3>Quick Actions</h3>
+            <div class="quick-actions">
+                <button class="btn btn-present quick-action-btn" onclick="markAllPresent()">✅ Mark All Present</button>
+                <button class="btn btn-absent quick-action-btn" onclick="markAllAbsent()">❌ Mark All Absent</button>
+                <button class="btn btn-info quick-action-btn" onclick="loadStudentsForAttendance()">🔄 Load Students</button>
+                <button class="btn btn-success quick-action-btn" onclick="saveAttendance()">💾 Save Attendance</button>
+            </div>
+        </div>
 
-  <!-- Roll Number Method -->
-  <div id="rollNumberMethod" class="hidden">
-    <h4>Roll Number Input Method</h4>
-    <p>Enter roll numbers of absent students (comma separated):</p>
-    <input type="text" id="absentRollNumbers" placeholder="e.g., 101, 105, 108">
-    <button class="btn" onclick="markAttendanceByRollNumbers()">Mark Attendance</button>
-    <p id="rollMethodMsg"></p>
-  </div>
+        <div class="attendance-section">
+            <h3>Student Attendance List</h3>
+            <div id="attendanceList" class="attendance-list"></div>
+        </div>
 
-  <button class="btn" onclick="saveAttendance()">💾 Save Attendance</button>
-  <p id="attMsg"></p>
-</section>
+        <div id="attendanceStats" class="attendance-stats"></div>
 
-<!-- 📊 Attendance Report -->
-<section id="reportSection">
-  <h2>Attendance Report & Fines</h2>
-  <button class="btn" onclick="generateReport()">📄 Generate Report</button>
-  <button class="btn btn-danger" onclick="deleteAllAttendanceAndFines()">🗑️ Delete All Attendance Report & Fines</button>
-  <table>
-    <thead><tr><th>Roll</th><th>Name</th><th>Present</th><th>Absent</th><th>Total</th><th>%</th><th>Fine (Rs)</th><th>Actions</th></tr></thead>
-    <tbody id="reportTable"></tbody>
-  </table>
-</section>
+        <p id="attendanceMsg"></p>
+    </section>
 
-<!-- 🌍 Public Attendance Viewer -->
-<section id="publicViewSection">
-  <h2>📅 Public Attendance View</h2>
-  <input type="text" id="searchRoll" placeholder="Enter Roll Number">
-  <button class="btn" onclick="viewPublicAttendance()">🔍 View Attendance</button>
-  <div id="publicOutput"></div>
-</section>
+    <!-- 💰 Payment Management -->
+    <section id="paymentSection">
+        <h2>💰 Payment Management</h2>
+        
+        <div class="payment-section">
+            <h3>➕ Record Payment</h3>
+            <div class="payment-form">
+                <select id="paymentStudent">
+                    <option value="">Select Student</option>
+                </select>
+                <input type="number" id="paymentAmount" placeholder="Amount (Rs)">
+                <select id="paymentMonth">
+                    <option value="">Select Month</option>
+                    <option value="01">January</option>
+                    <option value="02">February</option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+                <input type="number" id="paymentYear" placeholder="Year (e.g., 2024)" value="2024">
+                <input type="text" id="paymentNote" placeholder="Payment Note">
+                <button class="btn btn-success" onclick="recordPayment()">💳 Record Payment</button>
+            </div>
+        </div>
+        
+        <div class="payment-section">
+            <h3>📊 Payment Summary</h3>
+            <div id="paymentSummary"></div>
+            <button class="btn empty-all-btn" onclick="emptyAllPayments()">🗑️ Empty All Payments</button>
+            <button class="btn" onclick="loadPaymentSummary()">🔄 Refresh Payment Summary</button>
+        </div>
+    </section>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getDatabase, ref, set, get, remove, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+    <!-- 📊 View Report -->
+    <section id="reportSection">
+        <h2>📊 Attendance Report & Fines</h2>
+        
+        <div class="report-section">
+            <div class="quick-actions">
+                <button class="btn btn-info" onclick="generateReport()">📄 Generate Report</button>
+                <button class="btn btn-warning" onclick="calculateFines()">💰 Calculate Fines</button>
+                <button class="btn btn-delete-all" onclick="showEmptyAllConfirmation()">🗑️ Empty All Records</button>
+            </div>
+            
+            <div id="reportTable"></div>
+        </div>
+    </section>
 
-// 🔥 Firebase Config
+    <!-- 👨‍👩‍👧‍👦 Public View -->
+    <section id="publicViewSection">
+        <h2>👨‍👩‍👧‍👦 Student Attendance Viewer</h2>
+        <p style="color: #666; margin-bottom: 20px;">Parents can view their child's attendance by entering the roll number</p>
+        
+        <div class="public-section">
+            <h3>🔍 Search Student Attendance</h3>
+            <div class="public-form">
+                <input type="text" id="publicRollNumber" placeholder="Enter Student Roll Number">
+                <button class="btn btn-info" onclick="viewPublicAttendance()">🔍 View Attendance</button>
+            </div>
+        </div>
+
+        <div id="publicAttendanceResult"></div>
+    </section>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+<script>
+// Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyB_zOJiXH5ZSHs4miirkF4p7Fc6NUDuNiY",
-  authDomain: "faizan-e-raza-madarsa-8c743.firebaseapp.com",
-  databaseURL: "https://faizan-e-raza-madarsa-8c743-default-rtdb.firebaseio.com",
-  projectId: "faizan-e-raza-madarsa-8c743",
-  storageBucket: "faizan-e-raza-madarsa-8c743.firebasestorage.app",
-  messagingSenderId: "659467130617",
-  appId: "1:659467130617:web:9ed42e7bb8e3eea5917428"
+    apiKey: "AIzaSyB_zOJiXH5ZSHs4miirkF4p7Fc6NUDuNiY",
+    authDomain: "faizan-e-raza-madarsa-8c743.firebaseapp.com",
+    databaseURL: "https://faizan-e-raza-madarsa-8c743-default-rtdb.firebaseio.com",
+    projectId: "faizan-e-raza-madarsa-8c743",
+    storageBucket: "faizan-e-raza-madarsa-8c743.firebasestorage.app",
+    messagingSenderId: "659467130617",
+    appId: "1:659467130617:web:9ed42e7bb8e3eea5917428"
 };
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
 
-// Default Admin Code
-const adminRef = ref(db, "admin/code");
-get(adminRef).then(snap => { if (!snap.exists()) set(adminRef, "6457"); });
-
-// Set today's date as default
-document.getElementById('attDate').valueAsDate = new Date();
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
 
 // Global variables
 let currentStudents = [];
+let attendanceData = {};
+let flashMessageTimeout;
 
-// Section Switch
-window.showSection=id=>{
-  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-};
-
-// 🔐 Admin Login
-window.adminLogin=async()=>{
-  const code=document.getElementById("adminCode").value.trim();
-  const snap=await get(ref(db,"admin/code"));
-  const real=snap.exists()?snap.val():"6457";
-  if(code===real){
-    document.querySelectorAll("#studentBtn,#attendanceBtn,#reportBtn,#logoutBtn").forEach(b=>b.classList.remove("hidden"));
-    loginMsg.textContent="✅ Login Successful!";
-    showSection("addStudentSection");
-    loadStudentList();
-  } else loginMsg.textContent="❌ Wrong Admin Code!";
-};
-
-// 🚪 Logout
-window.adminLogout=()=>{
-  document.querySelectorAll("#studentBtn,#attendanceBtn,#reportBtn,#logoutBtn").forEach(b=>b.classList.add("hidden"));
-  showSection("loginSection");
-};
-
-// 🧑‍🎓 Add Student
-window.addStudent=async()=>{
-  const name=document.getElementById("studentName").value.trim();
-  const roll=document.getElementById("studentRoll").value.trim();
-  if(!name || !roll){msg.textContent="⚠ Please fill all fields!";return;}
-  await set(ref(db,"students/"+roll),{name,roll});
-  msg.textContent="✅ Student Added!";
-  studentName.value=studentRoll.value="";
-  loadStudentList();
-};
-
-// 🔁 Load Student List
-window.loadStudentList=async()=>{
-  const snap=await get(child(ref(db),"students"));
-  if(!snap.exists())return studentTable.innerHTML="<p>No Students Found!</p>";
-  let html="<table><tr><th>Roll</th><th>Name</th><th>Action</th></tr>";
-  snap.forEach(s=>{
-    const st=s.val();
-    html+=`<tr><td>${st.roll}</td><td>${st.name}</td>
-      <td><button class='btn' onclick='deleteStudent("${st.roll}")'>🗑️ Delete</button></td></tr>`;
-  });
-  html+="</table>";
-  studentTable.innerHTML=html;
-};
-
-// 🗑️ Delete Student
-window.deleteStudent=async(roll)=>{
-  if(confirm("Are you sure you want to delete this student?")){
-    await remove(ref(db,"students/"+roll));
-    await remove(ref(db,"fines/"+roll));
-    msg.textContent="🗑️ Student deleted!";
-    loadStudentList();
-  }
-};
-
-// Hide all method containers
-function hideAllMethods() {
-  document.getElementById('traditionalMethod').classList.add('hidden');
-  document.getElementById('quickMarkMethod').classList.add('hidden');
-  document.getElementById('rollNumberMethod').classList.add('hidden');
+// Initialize Admin Code in Firebase
+async function initializeAdminCode() {
+    try {
+        const snapshot = await database.ref('admin/code').once('value');
+        if (!snapshot.exists()) {
+            await database.ref('admin/code').set("6457");
+        }
+    } catch (error) {
+        console.error("Error initializing admin code:", error);
+    }
 }
 
-// 📋 Traditional Method
-window.loadTraditionalMethod = () => {
-  hideAllMethods();
-  document.getElementById('traditionalMethod').classList.remove('hidden');
-};
+// Section Switch
+function showSection(id) {
+    document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    
+    // Load specific data when switching to certain sections
+    if (id === 'paymentSection') {
+        loadPaymentStudentDropdown();
+        loadPaymentSummary();
+    }
+    if (id === 'attendanceSection') {
+        loadStudentsForAttendance();
+        loadLeaveStudentDropdown();
+        loadLeaveList();
+    }
+    if (id === 'reportSection') {
+        generateReport();
+    }
+    if (id === 'publicViewSection') {
+        // Clear previous results
+        document.getElementById('publicAttendanceResult').innerHTML = '';
+        document.getElementById('publicRollNumber').value = '';
+    }
+}
 
-// 📋 Load Students for Traditional Attendance
-window.loadStudentsForAttendance=async()=>{
-  const snap=await get(child(ref(db),"students"));
-  if(!snap.exists())return studentList.innerHTML="<p>No Students Found!</p>";
-  
-  currentStudents = [];
-  let html=`<table><tr><th>Roll</th><th>Name</th><th>Status</th></tr>`;
-  snap.forEach(s=>{
-    const st=s.val();
-    currentStudents.push(st);
-    html+=`<tr><td>${st.roll}</td><td>${st.name}</td>
-      <td><select id="att_${st.roll}">
-        <option value="Present">Present</option>
-        <option value="Absent">Absent</option>
-      </select></td></tr>`;
-  });
-  html+="</table>";
-  studentList.innerHTML=html;
-};
+// Toggle password visibility
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('adminCode');
+    const toggleIcon = document.querySelector('.toggle-icon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.textContent = '🙈';
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.textContent = '👁️';
+    }
+}
 
-// ⚡ Quick Mark Method
-window.loadQuickMarkMethod = async () => {
-  hideAllMethods();
-  document.getElementById('quickMarkMethod').classList.remove('hidden');
-  
-  const snap = await get(child(ref(db), "students"));
-  if (!snap.exists()) return quickMarkList.innerHTML = "<p>No Students Found!</p>";
-  
-  currentStudents = [];
-  let html = `<table><tr><th>Roll</th><th>Name</th><th>Status</th><th>Quick Actions</th></tr>`;
-  snap.forEach(s => {
-    const st = s.val();
-    currentStudents.push(st);
-    html += `<tr>
-      <td>${st.roll}</td>
-      <td>${st.name}</td>
-      <td><span id="status_${st.roll}">Present</span></td>
-      <td>
-        <div class="status-btns">
-          <button class="btn present status-btn" onclick="setStudentStatus('${st.roll}', 'Present')">✅</button>
-          <button class="btn absent status-btn" onclick="setStudentStatus('${st.roll}', 'Absent')">❌</button>
+// Show flash message
+function showFlashMessage(message, type = 'success') {
+    // Remove existing flash message
+    const existingFlash = document.querySelector('.flash-message');
+    if (existingFlash) {
+        existingFlash.remove();
+    }
+    
+    // Clear existing timeout
+    if (flashMessageTimeout) {
+        clearTimeout(flashMessageTimeout);
+    }
+    
+    // Create new flash message
+    const flashMessage = document.createElement('div');
+    flashMessage.className = `flash-message ${type}`;
+    flashMessage.textContent = message;
+    flashMessage.style.background = type === 'success' ? '#4caf50' : '#f44336';
+    
+    document.body.appendChild(flashMessage);
+    
+    // Remove after 3 seconds
+    flashMessageTimeout = setTimeout(() => {
+        if (flashMessage.parentNode) {
+            flashMessage.parentNode.removeChild(flashMessage);
+        }
+    }, 3000);
+}
+
+// Show confirmation dialog for Empty All
+function showEmptyAllConfirmation() {
+    const confirmationDialog = document.createElement('div');
+    confirmationDialog.className = 'confirmation-dialog';
+    confirmationDialog.innerHTML = `
+        <div class="confirmation-box">
+            <h3 style="color: #d32f2f; margin-bottom: 15px;">⚠️ WARNING: Delete All Records</h3>
+            <p style="margin-bottom: 10px; font-size: 16px; line-height: 1.5;">
+                Are you sure you want to delete ALL attendance records, leaves, and fines?
+            </p>
+            <p style="margin-bottom: 20px; color: #d32f2f; font-weight: bold;">
+                This action cannot be undone! All attendance data will be permanently lost.
+            </p>
+            <div class="confirmation-buttons">
+                <button class="confirm-btn" onclick="emptyAllRecords()">🗑️ Yes, Delete Everything</button>
+                <button class="cancel-btn" onclick="this.closest('.confirmation-dialog').remove()">❌ Cancel</button>
+            </div>
         </div>
-      </td>
-    </tr>`;
-  });
-  html += "</table>";
-  quickMarkList.innerHTML = html;
-};
+    `;
+    
+    document.body.appendChild(confirmationDialog);
+}
 
-// Set individual student status in quick mark method
-window.setStudentStatus = (roll, status) => {
-  document.getElementById(`status_${roll}`).textContent = status;
-  document.getElementById(`status_${roll}`).style.color = status === 'Present' ? 'green' : 'red';
-  document.getElementById(`status_${roll}`).style.fontWeight = 'bold';
-};
+// Empty all records (attendance, leaves, fines)
+async function emptyAllRecords() {
+    try {
+        // Remove confirmation dialog
+        document.querySelector('.confirmation-dialog').remove();
+        
+        showFlashMessage("🔄 Deleting all records...", "info");
+        
+        // Delete all attendance records
+        await database.ref('attendance').remove();
+        
+        // Delete all leaves
+        await database.ref('leaves').remove();
+        
+        // Reset all fines to 0
+        const studentsSnapshot = await database.ref('students').once('value');
+        if (studentsSnapshot.exists()) {
+            const updates = {};
+            studentsSnapshot.forEach(childSnapshot => {
+                const studentRoll = childSnapshot.key;
+                updates[`students/${studentRoll}/fine`] = 0;
+            });
+            await database.ref().update(updates);
+        }
+        
+        showFlashMessage("✅ All records have been deleted successfully!");
+        
+        // Refresh the report
+        setTimeout(() => {
+            generateReport();
+        }, 1000);
+        
+    } catch (error) {
+        showFlashMessage("❌ Error deleting records: " + error.message, "error");
+    }
+}
+
+// 🔐 Admin Login
+async function adminLogin() {
+    const code = document.getElementById("adminCode").value.trim();
+    
+    try {
+        const snapshot = await database.ref('admin/code').once('value');
+        const realCode = snapshot.exists() ? snapshot.val() : "6457";
+        
+        if (code === realCode) {
+            document.querySelectorAll("#studentBtn, #attendanceBtn, #paymentBtn, #reportBtn, #logoutBtn").forEach(b => b.classList.remove("hidden"));
+            document.getElementById("loginMsg").textContent = "✅ Login Successful!";
+            showSection("addStudentSection");
+            loadStudentList();
+        } else {
+            document.getElementById("loginMsg").textContent = "❌ Wrong Admin Code!";
+        }
+    } catch (error) {
+        document.getElementById("loginMsg").textContent = "❌ Error during login!";
+    }
+}
+
+// 🚪 Logout
+function adminLogout() {
+    document.querySelectorAll("#studentBtn, #attendanceBtn, #paymentBtn, #reportBtn, #logoutBtn").forEach(b => b.classList.add("hidden"));
+    showSection("loginSection");
+    document.getElementById("adminCode").value = "";
+}
+
+// 🧑‍🎓 Add Student
+async function addStudent() {
+    const name = document.getElementById("studentName").value.trim();
+    const roll = document.getElementById("studentRoll").value.trim();
+    
+    if (!name || !roll) {
+        document.getElementById("msg").textContent = "⚠ Please fill all fields!";
+        return;
+    }
+    
+    try {
+        // Check if student already exists in Firebase
+        const snapshot = await database.ref('students/' + roll).once('value');
+        if (snapshot.exists()) {
+            document.getElementById("msg").textContent = "❌ Student with this roll number already exists!";
+            return;
+        }
+        
+        // Add student to Firebase
+        await database.ref('students/' + roll).set({
+            name: name,
+            roll: roll,
+            payments: [],
+            remaining: 0,
+            fine: 0
+        });
+        
+        document.getElementById("msg").textContent = "✅ Student Added!";
+        document.getElementById("studentName").value = "";
+        document.getElementById("studentRoll").value = "";
+        
+        // Update student list display
+        loadStudentList();
+        
+        // Update payment dropdown
+        loadPaymentStudentDropdown();
+        
+    } catch (error) {
+        document.getElementById("msg").textContent = "❌ Error adding student: " + error.message;
+    }
+}
+
+// 🔁 Load Student List
+async function loadStudentList() {
+    try {
+        const studentTable = document.getElementById("studentTable");
+        studentTable.innerHTML = "<p>Loading students...</p>";
+        
+        const snapshot = await database.ref('students').once('value');
+        
+        if (!snapshot.exists()) {
+            studentTable.innerHTML = "<p>No Students Found!</p>";
+            currentStudents = [];
+            return;
+        }
+        
+        currentStudents = [];
+        let html = "<table><tr><th>Roll</th><th>Name</th><th>Action</th></tr>";
+        
+        snapshot.forEach(childSnapshot => {
+            const student = childSnapshot.val();
+            currentStudents.push(student);
+            
+            html += `<tr>
+                <td>${student.roll}</td>
+                <td>${student.name}</td>
+                <td><button class='btn btn-danger' onclick='deleteStudent("${student.roll}")'>🗑️ Delete</button></td>
+            </tr>`;
+        });
+        
+        html += "</table>";
+        studentTable.innerHTML = html;
+        
+    } catch (error) {
+        document.getElementById("studentTable").innerHTML = "<p>Error loading students: " + error.message + "</p>";
+    }
+}
+
+// 🗑️ Delete Student
+async function deleteStudent(roll) {
+    if (confirm("Are you sure you want to delete this student?")) {
+        try {
+            await database.ref('students/' + roll).remove();
+            document.getElementById("msg").textContent = "🗑️ Student deleted!";
+            loadStudentList();
+            loadPaymentStudentDropdown();
+            loadPaymentSummary();
+        } catch (error) {
+            document.getElementById("msg").textContent = "❌ Error deleting student: " + error.message;
+        }
+    }
+}
+
+// ========== ATTENDANCE FUNCTIONS ==========
+
+// Load students for attendance
+async function loadStudentsForAttendance() {
+    try {
+        const attendanceList = document.getElementById("attendanceList");
+        attendanceList.innerHTML = "<p>Loading students for attendance...</p>";
+        
+        const snapshot = await database.ref('students').once('value');
+        
+        if (!snapshot.exists()) {
+            attendanceList.innerHTML = "<p>No Students Found!</p>";
+            return;
+        }
+        
+        // Set default date to today if not set
+        const dateInput = document.getElementById('attendanceDate');
+        if (!dateInput.value) {
+            dateInput.valueAsDate = new Date();
+        }
+        
+        let html = "<table><tr><th>Roll</th><th>Name</th><th>Status</th><th>Action</th></tr>";
+        
+        snapshot.forEach(childSnapshot => {
+            const student = childSnapshot.val();
+            
+            // Default status is Present
+            const currentStatus = attendanceData[student.roll] || 'Present';
+            
+            html += `<tr>
+                <td>${student.roll}</td>
+                <td>${student.name}</td>
+                <td>
+                    <span class="status-badge ${currentStatus === 'Present' ? 'status-present' : 'status-absent'}" id="status_${student.roll}">
+                        ${currentStatus}
+                    </span>
+                </td>
+                <td>
+                    <div style="display: flex; gap: 5px; justify-content: center;">
+                        <button class='btn btn-present' onclick='setStudentStatus("${student.roll}", "Present")'>✅ Present</button>
+                        <button class='btn btn-absent' onclick='setStudentStatus("${student.roll}", "Absent")'>❌ Absent</button>
+                    </div>
+                </td>
+            </tr>`;
+        });
+        
+        html += "</table>";
+        attendanceList.innerHTML = html;
+        
+        // Update attendance stats
+        updateAttendanceStats();
+        
+    } catch (error) {
+        document.getElementById("attendanceList").innerHTML = "<p>Error loading students: " + error.message + "</p>";
+    }
+}
+
+// Set individual student status
+function setStudentStatus(roll, status) {
+    attendanceData[roll] = status;
+    
+    // Update status display
+    const statusElement = document.getElementById(`status_${roll}`);
+    if (statusElement) {
+        statusElement.textContent = status;
+        statusElement.className = `status-badge ${status === 'Present' ? 'status-present' : 'status-absent'}`;
+    }
+    
+    // Update stats
+    updateAttendanceStats();
+}
 
 // Mark all students present
-window.markAllPresent = () => {
-  currentStudents.forEach(student => {
-    setStudentStatus(student.roll, 'Present');
-  });
-};
+function markAllPresent() {
+    currentStudents.forEach(student => {
+        setStudentStatus(student.roll, 'Present');
+    });
+    showFlashMessage("✅ All students marked as Present!");
+}
 
 // Mark all students absent
-window.markAllAbsent = () => {
-  currentStudents.forEach(student => {
-    setStudentStatus(student.roll, 'Absent');
-  });
-};
-
-// 🔢 Roll Number Method
-window.loadRollNumberMethod = () => {
-  hideAllMethods();
-  document.getElementById('rollNumberMethod').classList.remove('hidden');
-};
-
-// Mark attendance by roll numbers
-window.markAttendanceByRollNumbers = async () => {
-  const absentRollsInput = document.getElementById('absentRollNumbers').value.trim();
-  const absentRolls = absentRollsInput.split(',').map(roll => roll.trim()).filter(roll => roll !== '');
-  
-  const snap = await get(child(ref(db), "students"));
-  if (!snap.exists()) {
-    document.getElementById('rollMethodMsg').textContent = "❌ No students found!";
-    return;
-  }
-  
-  currentStudents = [];
-  snap.forEach(s => {
-    currentStudents.push(s.val());
-  });
-  
-  // Mark all as present first, then mark specified rolls as absent
-  currentStudents.forEach(student => {
-    const isAbsent = absentRolls.includes(student.roll);
-    if (isAbsent) {
-      setStudentStatus(student.roll, 'Absent');
-    } else {
-      setStudentStatus(student.roll, 'Present');
-    }
-  });
-  
-  document.getElementById('rollMethodMsg').textContent = `✅ Attendance marked! ${absentRolls.length} students marked as absent.`;
-};
-
-// 💾 Save Attendance (Universal for all methods)
-window.saveAttendance=async()=>{
-  const date=document.getElementById("attDate").value;
-  if(!date)return attMsg.textContent="⚠ Please select a date!";
-  
-  if(currentStudents.length === 0){
-    attMsg.textContent="⚠ Please load students first using one of the methods!";
-    return;
-  }
-  
-  const saves=[];
-  currentStudents.forEach(student=>{
-    let status = "Present"; // default
-    
-    // Check which method is active and get status accordingly
-    if(!document.getElementById('traditionalMethod').classList.contains('hidden')){
-      // Traditional method
-      const selectElement = document.getElementById("att_"+student.roll);
-      if(selectElement) status = selectElement.value;
-    } else {
-      // Quick mark or roll number method
-      const statusElement = document.getElementById("status_"+student.roll);
-      if(statusElement) status = statusElement.textContent;
-    }
-    
-    saves.push(set(ref(db,"attendance/"+date+"/"+student.roll),{
-      roll:student.roll,
-      name:student.name,
-      status
-    }));
-  });
-  
-  await Promise.all(saves);
-  attMsg.textContent="✅ Attendance Saved Successfully!";
-  
-  // Reset forms
-  document.getElementById('absentRollNumbers').value = '';
-  document.getElementById('rollMethodMsg').textContent = '';
-};
-
-// 📊 Generate Report
-window.generateReport=async()=>{
-  const stdSnap=await get(child(ref(db),"students"));
-  const attSnap=await get(child(ref(db),"attendance"));
-  const fineSnap=await get(child(ref(db),"fines"));
-  reportTable.innerHTML="";
-  if(!stdSnap.exists())return reportTable.innerHTML="<tr><td colspan='8'>No Students</td></tr>";
-  stdSnap.forEach(stu=>{
-    const s=stu.val();
-    let total=0,present=0,absent=0;
-    attSnap.forEach(day=>{
-      const d=day.val()[s.roll];
-      if(d){
-        total++;
-        if(d.status==="Present")present++; else absent++;
-      }
+function markAllAbsent() {
+    currentStudents.forEach(student => {
+        setStudentStatus(student.roll, 'Absent');
     });
-    const percent=total?((present/total)*100).toFixed(1):0;
-    
-    // Calculate fine: Rs. 10 per absence
-    const calculatedFine = absent * 10;
-    
-    // Get existing fine if any, otherwise use calculated fine
-    const fineVal=fineSnap.exists()&&fineSnap.val()[s.roll]?fineSnap.val()[s.roll].amount:calculatedFine;
-    
-    reportTable.innerHTML+=`
-    <tr>
-      <td>${s.roll}</td><td>${s.name}</td><td>${present}</td><td>${absent}</td>
-      <td>${total}</td><td>${percent}%</td>
-      <td><input type='number' id='fine_${s.roll}' value='${fineVal}' placeholder='0' readonly></td>
-      <td>
-        <button class='btn btn-pay' onclick='payFine("${s.roll}")'>💰 Pay</button>
-      </td>
-    </tr>`;
-  });
-};
+    showFlashMessage("❌ All students marked as Absent!");
+}
 
-// 💰 Pay Fine (Reset to zero)
-window.payFine=async(roll)=>{
-  if(confirm(`Are you sure you want to mark the fine as paid for roll number ${roll}?`)){
-    await set(ref(db,"fines/"+roll),{amount:0});
-    alert("✅ Fine marked as paid!");
-    generateReport(); // Refresh the report
-  }
-};
+// Update attendance statistics
+function updateAttendanceStats() {
+    const totalStudents = currentStudents.length;
+    const presentCount = Object.values(attendanceData).filter(status => status === 'Present').length;
+    const absentCount = totalStudents - presentCount;
+    
+    const statsHtml = `
+        <div class="stat-card">
+            <div class="stat-number">${totalStudents}</div>
+            <div class="stat-label">Total Students</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" style="color: #4caf50;">${presentCount}</div>
+            <div class="stat-label">Present</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" style="color: #f44336;">${absentCount}</div>
+            <div class="stat-label">Absent</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" style="color: #2196f3;">${totalStudents ? Math.round((presentCount / totalStudents) * 100) : 0}%</div>
+            <div class="stat-label">Attendance %</div>
+        </div>
+    `;
+    
+    document.getElementById('attendanceStats').innerHTML = statsHtml;
+}
 
-// 🗑️ Delete All Attendance and Fines
-window.deleteAllAttendanceAndFines=async()=>{
-  if(confirm("⚠️ Are you sure you want to delete ALL attendance records and fines? This action cannot be undone!")){
+// Save attendance to Firebase
+async function saveAttendance() {
+    const date = document.getElementById('attendanceDate').value;
+    
+    if (!date) {
+        showFlashMessage("⚠ Please select a date!", "error");
+        return;
+    }
+    
+    if (Object.keys(attendanceData).length === 0) {
+        showFlashMessage("⚠ Please load students first!", "error");
+        return;
+    }
+    
     try {
-      await remove(ref(db, "attendance"));
-      await remove(ref(db, "fines"));
-      alert("✅ All attendance records and fines have been deleted!");
-      generateReport(); // Refresh the report table
+        // Save attendance for each student
+        const updates = {};
+        
+        currentStudents.forEach(student => {
+            const status = attendanceData[student.roll] || 'Present';
+            updates[`attendance/${date}/${student.roll}`] = {
+                roll: student.roll,
+                name: student.name,
+                status: status,
+                date: date,
+                timestamp: new Date().toISOString()
+            };
+        });
+        
+        await database.ref().update(updates);
+        
+        showFlashMessage("✅ Attendance Saved Successfully!");
+        
+        // Clear attendance data after saving
+        attendanceData = {};
+        
+        // Reload the attendance list to show saved status
+        setTimeout(() => {
+            loadStudentsForAttendance();
+        }, 2000);
+        
     } catch (error) {
-      alert("❌ Error deleting data: " + error.message);
+        showFlashMessage("❌ Error saving attendance: " + error.message, "error");
     }
-  }
-};
+}
 
-// 🌍 Public Attendance (Simplified - No month required, no status table)
-window.viewPublicAttendance=async()=>{
-  const roll=document.getElementById("searchRoll").value.trim();
-  if(!roll){
-    publicOutput.innerHTML="⚠ Please enter Roll Number!";
-    return;
-  }
+// ========== APPLICATION LEAVE FUNCTIONS ==========
 
-  const studentSnap=await get(ref(db,"students/"+roll));
-  if(!studentSnap.exists()){
-    publicOutput.innerHTML="❌ Invalid Roll Number!";
-    return;
-  }
-
-  const attSnap=await get(child(ref(db),"attendance"));
-  const fineSnap=await get(child(ref(db),"fines/"+roll));
-  
-  let total=0,present=0,absent=0;
-  if(attSnap.exists()){
-    attSnap.forEach(day=>{
-      const rec=day.val()[roll];
-      if(rec){
-        total++;
-        if(rec.status==="Present")present++; else absent++;
-      }
+// Load student dropdown for leave
+function loadLeaveStudentDropdown() {
+    const dropdown = document.getElementById('leaveStudent');
+    dropdown.innerHTML = '<option value="">Select Student</option>';
+    
+    currentStudents.forEach(student => {
+        dropdown.innerHTML += `<option value="${student.roll}">${student.roll} - ${student.name}</option>`;
     });
-  }
+}
 
-  if(total===0){
-    publicOutput.innerHTML="❌ No Attendance Record Found!";
-    return;
-  }
+// Add application leave
+async function addApplicationLeave() {
+    const roll = document.getElementById('leaveStudent').value;
+    const date = document.getElementById('leaveDate').value;
+    const reason = document.getElementById('leaveReason').value.trim();
+    
+    if (!roll || !date || !reason) {
+        showFlashMessage("⚠ Please fill all fields!", "error");
+        return;
+    }
+    
+    try {
+        // Get student name
+        const studentSnapshot = await database.ref('students/' + roll).once('value');
+        if (!studentSnapshot.exists()) {
+            showFlashMessage("❌ Student not found!", "error");
+            return;
+        }
+        
+        const studentName = studentSnapshot.val().name;
+        
+        // Save leave to Firebase
+        const leaveId = Date.now().toString();
+        await database.ref('leaves/' + leaveId).set({
+            roll: roll,
+            name: studentName,
+            date: date,
+            reason: reason,
+            timestamp: new Date().toISOString()
+        });
+        
+        showFlashMessage("✅ Leave application added successfully!");
+        
+        // Reset form
+        document.getElementById('leaveReason').value = '';
+        
+        // Refresh leave list
+        loadLeaveList();
+        
+    } catch (error) {
+        showFlashMessage("❌ Error adding leave: " + error.message, "error");
+    }
+}
 
-  // Calculate fine: Rs. 10 per absence
-  const calculatedFine = absent * 10;
-  // Get existing fine if any, otherwise use calculated fine
-  let fine = fineSnap.exists() ? fineSnap.val().amount : calculatedFine;
+// Load leave list
+async function loadLeaveList() {
+    try {
+        const leaveList = document.getElementById("leaveList");
+        leaveList.innerHTML = "<p>Loading leave applications...</p>";
+        
+        const snapshot = await database.ref('leaves').once('value');
+        
+        if (!snapshot.exists()) {
+            leaveList.innerHTML = "<p>No Leave Applications Found!</p>";
+            return;
+        }
+        
+        let html = "<table><tr><th>Roll</th><th>Name</th><th>Date</th><th>Reason</th><th>Action</th></tr>";
+        
+        snapshot.forEach(childSnapshot => {
+            const leave = childSnapshot.val();
+            
+            html += `<tr>
+                <td>${leave.roll}</td>
+                <td>${leave.name}</td>
+                <td>${leave.date}</td>
+                <td>${leave.reason}</td>
+                <td><button class='btn btn-danger' onclick='deleteLeave("${childSnapshot.key}")'>🗑️ Delete</button></td>
+            </tr>`;
+        });
+        
+        html += "</table>";
+        leaveList.innerHTML = html;
+        
+    } catch (error) {
+        document.getElementById("leaveList").innerHTML = "<p>Error loading leaves: " + error.message + "</p>";
+    }
+}
 
-  const percent=((present/total)*100).toFixed(1);
-  
-  publicOutput.innerHTML=`
-  <div class="public-summary">
-    <h3>📘 Attendance Summary</h3>
-    <div class="summary-item"><b>Name:</b> ${studentSnap.val().name}</div>
-    <div class="summary-item"><b>Roll Number:</b> ${roll}</div>
-    <div class="summary-item"><b>Total Days:</b> ${total}</div>
-    <div class="summary-item"><b>Present Days:</b> ${present}</div>
-    <div class="summary-item"><b>Absent Days:</b> ${absent}</div>
-    <div class="summary-item"><b>Attendance Percentage:</b> ${percent}%</div>
-    <div class="summary-item"><b>Total Fine:</b> Rs ${fine}</div>
-  </div>`;
-};
+// Delete leave
+async function deleteLeave(leaveId) {
+    if (confirm("Are you sure you want to delete this leave application?")) {
+        try {
+            await database.ref('leaves/' + leaveId).remove();
+            showFlashMessage("✅ Leave application deleted!");
+            loadLeaveList();
+        } catch (error) {
+            showFlashMessage("❌ Error deleting leave: " + error.message, "error");
+        }
+    }
+}
+
+// ========== PAYMENT FUNCTIONS ==========
+
+// Load student dropdown for payment
+function loadPaymentStudentDropdown() {
+    const dropdown = document.getElementById('paymentStudent');
+    dropdown.innerHTML = '<option value="">Select Student</option>';
+    
+    currentStudents.forEach(student => {
+        dropdown.innerHTML += `<option value="${student.roll}">${student.roll} - ${student.name}</option>`;
+    });
+}
+
+// Record a payment
+async function recordPayment() {
+    const roll = document.getElementById('paymentStudent').value;
+    const amount = parseFloat(document.getElementById('paymentAmount').value);
+    const month = document.getElementById('paymentMonth').value;
+    const year = document.getElementById('paymentYear').value;
+    const note = document.getElementById('paymentNote').value.trim();
+    
+    if (!roll || !amount || !month || !year) {
+        showFlashMessage("⚠ Please fill all required fields!", "error");
+        return;
+    }
+    
+    if (amount <= 0) {
+        showFlashMessage("⚠ Payment amount must be greater than 0!", "error");
+        return;
+    }
+    
+    try {
+        // Get current student data
+        const snapshot = await database.ref('students/' + roll).once('value');
+        if (!snapshot.exists()) {
+            showFlashMessage("❌ Student not found!", "error");
+            return;
+        }
+        
+        const student = snapshot.val();
+        
+        // Initialize payments array if it doesn't exist
+        if (!student.payments) {
+            student.payments = [];
+        }
+        
+        // Create new payment with month and year
+        const newPayment = {
+            amount: amount,
+            month: month,
+            year: year,
+            note: note,
+            timestamp: new Date().toISOString(),
+            id: Date.now().toString()
+        };
+        
+        // Add payment to array
+        student.payments.push(newPayment);
+        
+        // Update student in Firebase
+        await database.ref('students/' + roll).update({
+            payments: student.payments
+        });
+        
+        showFlashMessage("✅ Payment recorded successfully!");
+        
+        // Reset form
+        document.getElementById('paymentAmount').value = '';
+        document.getElementById('paymentNote').value = '';
+        
+        // Refresh payment data
+        loadPaymentSummary();
+        
+    } catch (error) {
+        showFlashMessage("❌ Error recording payment: " + error.message, "error");
+    }
+}
+
+// Load payment summary
+async function loadPaymentSummary() {
+    try {
+        const paymentSummary = document.getElementById('paymentSummary');
+        paymentSummary.innerHTML = "<p>Loading payment summary...</p>";
+        
+        const snapshot = await database.ref('students').once('value');
+        
+        if (!snapshot.exists()) {
+            paymentSummary.innerHTML = "<p>No Students Found!</p>";
+            return;
+        }
+        
+        let html = "<table><tr><th>Roll</th><th>Name</th><th>Total Paid</th><th>Remaining</th><th>Add Remaining</th></tr>";
+        
+        snapshot.forEach(childSnapshot => {
+            const student = childSnapshot.val();
+            let totalPaid = 0;
+            
+            // Calculate total payments for this student
+            if (student.payments) {
+                student.payments.forEach(payment => {
+                    totalPaid += payment.amount;
+                });
+            }
+            
+            // Get remaining amount (if set)
+            const remaining = student.remaining || 0;
+            
+            html += `<tr>
+                <td>${student.roll}</td>
+                <td>${student.name}</td>
+                <td>Rs ${totalPaid}</td>
+                <td>Rs ${remaining}</td>
+                <td>
+                    <input type="number" id="remaining_${student.roll}" placeholder="Add Remaining" style="width: 120px; margin-right: 5px;">
+                    <button class='btn btn-info' onclick='addRemaining("${student.roll}")'>➕ Add</button>
+                </td>
+            </tr>`;
+        });
+        
+        html += "</table>";
+        paymentSummary.innerHTML = html;
+        
+    } catch (error) {
+        document.getElementById("paymentSummary").innerHTML = "<p>Error loading payment summary: " + error.message + "</p>";
+    }
+}
+
+// Add remaining amount
+async function addRemaining(roll) {
+    const remainingInput = document.getElementById(`remaining_${roll}`);
+    const remainingAmount = parseFloat(remainingInput.value);
+    
+    if (isNaN(remainingAmount) || remainingAmount < 0) {
+        showFlashMessage("⚠ Please enter a valid remaining amount!", "error");
+        return;
+    }
+    
+    try {
+        // Update remaining amount in Firebase
+        await database.ref('students/' + roll).update({
+            remaining: remainingAmount
+        });
+        
+        showFlashMessage("✅ Remaining amount added successfully!");
+        loadPaymentSummary();
+        remainingInput.value = '';
+        
+    } catch (error) {
+        showFlashMessage("❌ Error adding remaining amount: " + error.message, "error");
+    }
+}
+
+// Empty all payments
+async function emptyAllPayments() {
+    if (confirm("Are you sure you want to empty all payments? This action cannot be undone!")) {
+        try {
+            const snapshot = await database.ref('students').once('value');
+            
+            if (snapshot.exists()) {
+                const updates = {};
+                
+                snapshot.forEach(childSnapshot => {
+                    const studentRoll = childSnapshot.key;
+                    updates[`students/${studentRoll}/payments`] = [];
+                    updates[`students/${studentRoll}/remaining`] = 0;
+                });
+                
+                await database.ref().update(updates);
+                showFlashMessage("✅ All payments have been emptied!");
+                loadPaymentSummary();
+            }
+            
+        } catch (error) {
+            showFlashMessage("❌ Error emptying payments: " + error.message, "error");
+        }
+    }
+}
+
+// ========== REPORT FUNCTIONS ==========
+
+// Generate report with fines
+async function generateReport() {
+    try {
+        const reportTable = document.getElementById("reportTable");
+        reportTable.innerHTML = "<p>Generating report...</p>";
+        
+        const studentsSnapshot = await database.ref('students').once('value');
+        const attendanceSnapshot = await database.ref('attendance').once('value');
+        const leavesSnapshot = await database.ref('leaves').once('value');
+        
+        if (!studentsSnapshot.exists()) {
+            reportTable.innerHTML = "<p>No Students Found!</p>";
+            return;
+        }
+        
+        let html = "<table><tr><th>Roll</th><th>Name</th><th>Present</th><th>Absent</th><th>Leaves</th><th>Total Days</th><th>Fine (Rs 10 per absence)</th><th>Action</th></tr>";
+        
+        // Get leaves data
+        const leaves = {};
+        if (leavesSnapshot.exists()) {
+            leavesSnapshot.forEach(leaveSnap => {
+                const leave = leaveSnap.val();
+                if (!leaves[leave.roll]) leaves[leave.roll] = 0;
+                leaves[leave.roll]++;
+            });
+        }
+        
+        studentsSnapshot.forEach(childSnapshot => {
+            const student = childSnapshot.val();
+            let present = 0;
+            let absent = 0;
+            let totalDays = 0;
+            
+            // Calculate attendance
+            if (attendanceSnapshot.exists()) {
+                attendanceSnapshot.forEach(dateSnap => {
+                    const attendanceRecord = dateSnap.val()[student.roll];
+                    if (attendanceRecord) {
+                        totalDays++;
+                        if (attendanceRecord.status === 'Present') {
+                            present++;
+                        } else {
+                            absent++;
+                        }
+                    }
+                });
+            }
+            
+            // Calculate fine (Rs 10 per absence, excluding leaves)
+            const leaveCount = leaves[student.roll] || 0;
+            const fineAmount = Math.max(0, (absent - leaveCount)) * 10;
+            
+            // Check if fine is already paid (0)
+            const isFinePaid = student.fine === 0;
+            
+            html += `<tr>
+                <td>${student.roll}</td>
+                <td>${student.name}</td>
+                <td>${present}</td>
+                <td>${absent}</td>
+                <td><span class="leave-approved">${leaveCount}</span></td>
+                <td>${totalDays}</td>
+                <td>
+                    <span class="${isFinePaid ? 'fine-paid' : 'fine-amount'}">
+                        ${isFinePaid ? 'Paid ✅' : 'Rs ' + fineAmount}
+                    </span>
+                </td>
+                <td>
+                    ${isFinePaid ? 
+                        '<button class="btn btn-paid" disabled>✅ Paid</button>' : 
+                        `<button class='btn btn-pay' onclick='payFine("${student.roll}")'>💰 Pay Fine</button>`
+                    }
+                </td>
+            </tr>`;
+        });
+        
+        html += "</table>";
+        reportTable.innerHTML = html;
+        
+    } catch (error) {
+        document.getElementById("reportTable").innerHTML = "<p>Error generating report: " + error.message + "</p>";
+    }
+}
+
+// Calculate and update fines
+async function calculateFines() {
+    try {
+        const studentsSnapshot = await database.ref('students').once('value');
+        const attendanceSnapshot = await database.ref('attendance').once('value');
+        const leavesSnapshot = await database.ref('leaves').once('value');
+        
+        if (!studentsSnapshot.exists()) {
+            showFlashMessage("❌ No students found!", "error");
+            return;
+        }
+        
+        // Get leaves data
+        const leaves = {};
+        if (leavesSnapshot.exists()) {
+            leavesSnapshot.forEach(leaveSnap => {
+                const leave = leaveSnap.val();
+                if (!leaves[leave.roll]) leaves[leave.roll] = 0;
+                leaves[leave.roll]++;
+            });
+        }
+        
+        const updates = {};
+        
+        studentsSnapshot.forEach(childSnapshot => {
+            const student = childSnapshot.val();
+            let absent = 0;
+            
+            // Calculate absent days
+            if (attendanceSnapshot.exists()) {
+                attendanceSnapshot.forEach(dateSnap => {
+                    const attendanceRecord = dateSnap.val()[student.roll];
+                    if (attendanceRecord && attendanceRecord.status === 'Absent') {
+                        absent++;
+                    }
+                });
+            }
+            
+            // Calculate fine (Rs 10 per absence, excluding leaves)
+            const leaveCount = leaves[student.roll] || 0;
+            const fineAmount = Math.max(0, (absent - leaveCount)) * 10;
+            
+            // Only update fine if it's not already paid (0)
+            if (student.fine !== 0) {
+                updates[`students/${student.roll}/fine`] = fineAmount;
+            }
+        });
+        
+        if (Object.keys(updates).length > 0) {
+            await database.ref().update(updates);
+            showFlashMessage("✅ Fines calculated and updated successfully!");
+        } else {
+            showFlashMessage("ℹ️ All fines are already paid or calculated!");
+        }
+        
+        generateReport();
+        
+    } catch (error) {
+        showFlashMessage("❌ Error calculating fines: " + error.message, "error");
+    }
+}
+
+// Pay fine (set fine to 0) - ONE CLICK ONLY
+async function payFine(roll) {
+    try {
+        // Immediately set fine to 0 without confirmation
+        await database.ref('students/' + roll).update({
+            fine: 0
+        });
+        
+        showFlashMessage(`✅ Fine paid successfully for Roll No: ${roll}!`);
+        
+        // Update the report immediately
+        generateReport();
+        
+    } catch (error) {
+        showFlashMessage("❌ Error paying fine: " + error.message, "error");
+    }
+}
+
+// ========== PUBLIC VIEW FUNCTIONS ==========
+
+// View public attendance
+async function viewPublicAttendance() {
+    const roll = document.getElementById('publicRollNumber').value.trim();
+    
+    if (!roll) {
+        document.getElementById('publicAttendanceResult').innerHTML = `
+            <div class="public-section">
+                <p style="color: #f44336; text-align: center;">⚠ Please enter a roll number</p>
+            </div>
+        `;
+        return;
+    }
+    
+    try {
+        document.getElementById('publicAttendanceResult').innerHTML = "<p>Loading student information...</p>";
+        
+        // Get student data
+        const studentSnapshot = await database.ref('students/' + roll).once('value');
+        if (!studentSnapshot.exists()) {
+            document.getElementById('publicAttendanceResult').innerHTML = `
+                <div class="public-section">
+                    <p style="color: #f44336; text-align: center;">❌ Student not found! Please check the roll number.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        const student = studentSnapshot.val();
+        
+        // Get attendance data
+        const attendanceSnapshot = await database.ref('attendance').once('value');
+        const leavesSnapshot = await database.ref('leaves').once('value');
+        
+        let present = 0;
+        let absent = 0;
+        let totalDays = 0;
+        
+        // Calculate attendance
+        if (attendanceSnapshot.exists()) {
+            attendanceSnapshot.forEach(dateSnap => {
+                const attendanceRecord = dateSnap.val()[student.roll];
+                if (attendanceRecord) {
+                    totalDays++;
+                    if (attendanceRecord.status === 'Present') {
+                        present++;
+                    } else {
+                        absent++;
+                    }
+                }
+            });
+        }
+        
+        // Get leaves data
+        let leaveCount = 0;
+        if (leavesSnapshot.exists()) {
+            leavesSnapshot.forEach(leaveSnap => {
+                const leave = leaveSnap.val();
+                if (leave.roll === roll) {
+                    leaveCount++;
+                }
+            });
+        }
+        
+        // Calculate attendance percentage
+        const attendancePercentage = totalDays ? Math.round((present / totalDays) * 100) : 0;
+        
+        // Calculate fine (excluding leaves)
+        const fineAmount = Math.max(0, (absent - leaveCount)) * 10;
+        
+        // Create HTML for public view (SIMPLIFIED - No calendar or statistics)
+        const publicHTML = `
+            <div class="public-section">
+                <h3>📊 Student Attendance Summary</h3>
+                <div class="public-summary">
+                    <div class="summary-item"><b>Student Name:</b> ${student.name}</div>
+                    <div class="summary-item"><b>Roll Number:</b> ${student.roll}</div>
+                    <div class="summary-item"><b>Total Days Recorded:</b> ${totalDays}</div>
+                    <div class="summary-item"><b>Present Days:</b> ${present}</div>
+                    <div class="summary-item"><b>Absent Days:</b> ${absent}</div>
+                    <div class="summary-item"><b>Approved Leaves:</b> ${leaveCount}</div>
+                    <div class="summary-item"><b>Attendance Percentage:</b> ${attendancePercentage}%</div>
+                    <div class="summary-item"><b>Current Fine:</b> Rs ${fineAmount}</div>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('publicAttendanceResult').innerHTML = publicHTML;
+        
+    } catch (error) {
+        document.getElementById('publicAttendanceResult').innerHTML = `
+            <div class="public-section">
+                <p style="color: #f44336; text-align: center;">❌ Error loading attendance data: ${error.message}</p>
+            </div>
+        `;
+    }
+}
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize admin code
+    initializeAdminCode();
+    
+    // Set today's date as default for payment date and attendance date
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('paymentDate').value = today;
+    document.getElementById('attendanceDate').value = today;
+    document.getElementById('leaveDate').value = today;
+    
+    // Set current year as default
+    document.getElementById('paymentYear').value = new Date().getFullYear();
+    
+    // Load initial data
+    loadStudentList();
+    loadPaymentStudentDropdown();
+    loadPaymentSummary();
+});
 </script>
 </body>
 </html>
