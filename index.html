@@ -15,7 +15,7 @@
 body {
     background: linear-gradient(135deg, #f5fff5 0%, #e8f5e9 100%);
     min-height: 100vh;
-    padding: 20px;
+    padding: 10px;
 }
 
 .container {
@@ -31,8 +31,8 @@ header {
     background: linear-gradient(to right, #228b22, #d4af37);
     color: white;
     text-align: center;
-    padding: 1.5rem;
-    font-size: 1.8rem;
+    padding: 1rem;
+    font-size: 1.5rem;
     font-weight: bold;
     position: relative;
 }
@@ -53,12 +53,13 @@ nav {
     flex-wrap: wrap;
     background: #e8f5e9;
     border-bottom: 2px solid #c5e1a5;
-    padding: 10px;
+    padding: 8px;
+    gap: 5px;
 }
 
 nav button {
-    margin: 5px;
-    padding: 12px 20px;
+    margin: 3px;
+    padding: 10px 15px;
     border: none;
     background: #2e7d32;
     color: white;
@@ -67,6 +68,10 @@ nav button {
     font-weight: bold;
     transition: all 0.3s ease;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    flex: 1;
+    min-width: 120px;
+    max-width: 180px;
 }
 
 nav button:hover {
@@ -77,7 +82,7 @@ nav button:hover {
 
 section {
     display: none;
-    padding: 25px;
+    padding: 20px;
     animation: fadeIn 0.5s ease;
 }
 
@@ -117,6 +122,7 @@ input:focus, select:focus, textarea:focus {
     font-weight: bold;
     transition: all 0.3s ease;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
 .btn:hover {
@@ -226,12 +232,14 @@ table {
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
+    font-size: 14px;
 }
 
 th, td {
     border: 1px solid #ddd;
-    padding: 12px;
+    padding: 10px;
     text-align: center;
+    word-break: break-word;
 }
 
 th {
@@ -253,9 +261,9 @@ tr:hover {
 
 .attendance-section, .payment-section, .report-section, .leave-section, .public-section {
     background: #e8f5e9;
-    padding: 20px;
+    padding: 15px;
     border-radius: 10px;
-    margin: 15px 0;
+    margin: 10px 0;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
@@ -273,6 +281,7 @@ tr:hover {
 
 .attendance-list {
     margin-top: 20px;
+    overflow-x: auto;
 }
 
 .status-badge {
@@ -294,14 +303,14 @@ tr:hover {
 
 .payment-form, .leave-form {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 15px;
     margin: 15px 0;
 }
 
 .public-form {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr;
     gap: 10px;
     margin: 15px 0;
 }
@@ -317,6 +326,8 @@ tr:hover {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     animation: slideIn 0.5s ease, fadeOut 0.5s ease 2.5s forwards;
+    max-width: 90%;
+    word-break: break-word;
 }
 
 @keyframes slideIn {
@@ -362,21 +373,21 @@ tr:hover {
 
 .attendance-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    margin: 20px 0;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin: 15px 0;
 }
 
 .stat-card {
     background: white;
-    padding: 20px;
+    padding: 15px;
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
 
 .stat-number {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: bold;
     color: #2e7d32;
 }
@@ -384,6 +395,7 @@ tr:hover {
 .stat-label {
     color: #666;
     margin-top: 5px;
+    font-size: 14px;
 }
 
 .fine-amount {
@@ -412,16 +424,17 @@ tr:hover {
     justify-content: center;
     align-items: center;
     z-index: 2000;
+    padding: 15px;
 }
 
 .confirmation-box {
     background: white;
-    padding: 30px;
+    padding: 25px;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     text-align: center;
     max-width: 500px;
-    width: 90%;
+    width: 100%;
 }
 
 .confirmation-buttons {
@@ -429,6 +442,7 @@ tr:hover {
     gap: 15px;
     justify-content: center;
     margin-top: 20px;
+    flex-wrap: wrap;
 }
 
 .confirmation-buttons button {
@@ -438,6 +452,8 @@ tr:hover {
     cursor: pointer;
     font-weight: bold;
     transition: all 0.3s ease;
+    flex: 1;
+    min-width: 120px;
 }
 
 .confirm-btn {
@@ -460,7 +476,7 @@ tr:hover {
 
 .public-summary {
     background: #e3f2fd;
-    padding: 20px;
+    padding: 15px;
     border-radius: 10px;
     margin: 15px 0;
 }
@@ -471,36 +487,127 @@ tr:hover {
     background: white;
     border-radius: 8px;
     font-size: 16px;
+    word-break: break-word;
 }
 
 .summary-item b {
     color: #2e7d32;
 }
 
-@media (max-width: 768px) {
-    .payment-form, .leave-form {
-        grid-template-columns: 1fr;
+.mobile-table-container {
+    overflow-x: auto;
+    margin: 15px 0;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-table-container table {
+    min-width: 600px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.action-buttons button {
+    padding: 8px 12px;
+    font-size: 12px;
+    margin: 2px;
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 480px) {
+    body {
+        padding: 5px;
     }
     
-    .public-form {
-        grid-template-columns: 1fr;
-    }
-    
-    nav button {
-        padding: 10px 15px;
-        font-size: 14px;
+    header {
+        font-size: 1.2rem;
+        padding: 0.8rem;
     }
     
     section {
         padding: 15px;
     }
     
-    .quick-actions {
-        flex-direction: column;
+    nav button {
+        padding: 8px 10px;
+        font-size: 12px;
+        min-width: 100px;
     }
     
-    .confirmation-buttons {
-        flex-direction: column;
+    .btn {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+    
+    table {
+        font-size: 12px;
+    }
+    
+    th, td {
+        padding: 8px 5px;
+    }
+    
+    .attendance-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .stat-card {
+        padding: 10px;
+    }
+    
+    .stat-number {
+        font-size: 1.2rem;
+    }
+    
+    .stat-label {
+        font-size: 12px;
+    }
+    
+    .confirmation-box {
+        padding: 20px;
+    }
+    
+    .confirmation-buttons button {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+    
+    .flash-message {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 768px) {
+    .payment-form, .leave-form {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .public-form {
+        grid-template-columns: 1fr auto;
+    }
+    
+    .btn {
+        width: auto;
+    }
+    
+    .action-buttons {
+        flex-wrap: nowrap;
+    }
+    
+    .action-buttons button {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .payment-form, .leave-form {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 }
 </style>
@@ -539,7 +646,9 @@ tr:hover {
         <button class="btn" onclick="addStudent()">➕ Add Student</button>
         <p id="msg"></p>
         <h3>Existing Students</h3>
-        <div id="studentTable"></div>
+        <div class="mobile-table-container">
+            <div id="studentTable"></div>
+        </div>
         <button class="btn" onclick="loadStudentList()">🔄 Refresh List</button>
     </section>
 
@@ -563,7 +672,9 @@ tr:hover {
                 <input type="text" id="leaveReason" placeholder="Leave Reason">
                 <button class="btn btn-success" onclick="addApplicationLeave()">➕ Add Leave</button>
             </div>
-            <div id="leaveList"></div>
+            <div class="mobile-table-container">
+                <div id="leaveList"></div>
+            </div>
         </div>
 
         <div class="attendance-section">
@@ -578,7 +689,9 @@ tr:hover {
 
         <div class="attendance-section">
             <h3>Student Attendance List</h3>
-            <div id="attendanceList" class="attendance-list"></div>
+            <div class="mobile-table-container">
+                <div id="attendanceList" class="attendance-list"></div>
+            </div>
         </div>
 
         <div id="attendanceStats" class="attendance-stats"></div>
@@ -620,7 +733,9 @@ tr:hover {
         
         <div class="payment-section">
             <h3>📊 Payment Summary</h3>
-            <div id="paymentSummary"></div>
+            <div class="mobile-table-container">
+                <div id="paymentSummary"></div>
+            </div>
             <button class="btn empty-all-btn" onclick="emptyAllPayments()">🗑️ Empty All Payments</button>
             <button class="btn" onclick="loadPaymentSummary()">🔄 Refresh Payment Summary</button>
         </div>
@@ -637,7 +752,9 @@ tr:hover {
                 <button class="btn btn-delete-all" onclick="showEmptyAllConfirmation()">🗑️ Empty All Records</button>
             </div>
             
-            <div id="reportTable"></div>
+            <div class="mobile-table-container">
+                <div id="reportTable"></div>
+            </div>
         </div>
     </section>
 
@@ -917,7 +1034,7 @@ async function loadStudentList() {
             html += `<tr>
                 <td>${student.roll}</td>
                 <td>${student.name}</td>
-                <td><button class='btn btn-danger' onclick='deleteStudent("${student.roll}")'>🗑️ Delete</button></td>
+                <td><div class="action-buttons"><button class='btn btn-danger' onclick='deleteStudent("${student.roll}")'>🗑️ Delete</button></div></td>
             </tr>`;
         });
         
@@ -982,7 +1099,7 @@ async function loadStudentsForAttendance() {
                     </span>
                 </td>
                 <td>
-                    <div style="display: flex; gap: 5px; justify-content: center;">
+                    <div class="action-buttons">
                         <button class='btn btn-present' onclick='setStudentStatus("${student.roll}", "Present")'>✅ Present</button>
                         <button class='btn btn-absent' onclick='setStudentStatus("${student.roll}", "Absent")'>❌ Absent</button>
                     </div>
@@ -1185,7 +1302,7 @@ async function loadLeaveList() {
                 <td>${leave.name}</td>
                 <td>${leave.date}</td>
                 <td>${leave.reason}</td>
-                <td><button class='btn btn-danger' onclick='deleteLeave("${childSnapshot.key}")'>🗑️ Delete</button></td>
+                <td><div class="action-buttons"><button class='btn btn-danger' onclick='deleteLeave("${childSnapshot.key}")'>🗑️ Delete</button></div></td>
             </tr>`;
         });
         
@@ -1322,8 +1439,10 @@ async function loadPaymentSummary() {
                 <td>Rs ${totalPaid}</td>
                 <td>Rs ${remaining}</td>
                 <td>
-                    <input type="number" id="remaining_${student.roll}" placeholder="Add Remaining" style="width: 120px; margin-right: 5px;">
-                    <button class='btn btn-info' onclick='addRemaining("${student.roll}")'>➕ Add</button>
+                    <div style="display: flex; flex-wrap: wrap; gap: 5px; align-items: center;">
+                        <input type="number" id="remaining_${student.roll}" placeholder="Add Remaining" style="flex: 1; min-width: 100px;">
+                        <button class='btn btn-info' onclick='addRemaining("${student.roll}")'>➕ Add</button>
+                    </div>
                 </td>
             </tr>`;
         });
@@ -1457,10 +1576,12 @@ async function generateReport() {
                     </span>
                 </td>
                 <td>
-                    ${isFinePaid ? 
-                        '<button class="btn btn-paid" disabled>✅ Paid</button>' : 
-                        `<button class='btn btn-pay' onclick='payFine("${student.roll}")'>💰 Pay Fine</button>`
-                    }
+                    <div class="action-buttons">
+                        ${isFinePaid ? 
+                            '<button class="btn btn-paid" disabled>✅ Paid</button>' : 
+                            `<button class='btn btn-pay' onclick='payFine("${student.roll}")'>💰 Pay Fine</button>`
+                        }
+                    </div>
                 </td>
             </tr>`;
         });
@@ -1659,7 +1780,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Set today's date as default for payment date and attendance date
     const today = new Date().toISOString().split('T')[0];
-    document.getElementById('paymentDate').value = today;
     document.getElementById('attendanceDate').value = today;
     document.getElementById('leaveDate').value = today;
     
