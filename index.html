@@ -15,10 +15,26 @@ section{display:none;padding:20px;}
 input,select{width:100%;padding:8px;margin-top:5px;border:1px solid #ccc;border-radius:5px;}
 .btn{background:#388e3c;color:white;border:none;padding:8px 14px;border-radius:5px;cursor:pointer;margin-top:5px;}
 .btn:hover{background:#2e7d32;}
+.btn-danger{background:#d32f2f;}
+.btn-danger:hover{background:#b71c1c;}
+.btn-pay{background:#1976d2;}
+.btn-pay:hover{background:#1565c0;}
+.btn-info{background:#0288d1;}
+.btn-info:hover{background:#01579b;}
+.btn-warning{background:#f57c00;}
+.btn-warning:hover{background:#e65100;}
 table{width:100%;border-collapse:collapse;margin-top:10px;}
 th,td{border:1px solid #ccc;padding:8px;text-align:center;}
 th{background:#c8e6c9;}
 .hidden{display:none;}
+.attendance-methods{margin:15px 0;padding:15px;background:#e8f5e9;border-radius:8px;}
+.method-btn{width:100%;margin:5px 0;padding:12px;}
+.status-btns{display:flex;gap:10px;margin:10px 0;}
+.status-btn{flex:1;padding:10px;}
+.present{background:#4caf50;}
+.absent{background:#f44336;}
+.quick-actions{margin:10px 0;}
+.bulk-actions{margin:15px 0;padding:10px;background:#fff3e0;border-radius:5px;}
 </style>
 </head>
 <body>
@@ -29,7 +45,6 @@ th{background:#c8e6c9;}
   <button onclick="showSection('loginSection')">Admin Login</button>
   <button id="studentBtn" class="hidden" onclick="showSection('addStudentSection')">Add / Delete Student</button>
   <button id="attendanceBtn" class="hidden" onclick="showSection('attendanceSection')">Mark Attendance</button>
-  <button id="deleteAttBtn" class="hidden" onclick="showSection('deleteAttendanceSection')">Delete Attendance</button>
   <button id="reportBtn" class="hidden" onclick="showSection('reportSection')">View Report</button>
   <button id="logoutBtn" class="hidden" onclick="adminLogout()">Logout</button>
   <button onclick="showSection('publicViewSection')">📅 Public Attendance</button>
@@ -57,28 +72,65 @@ th{background:#c8e6c9;}
 
 <!-- ✅ Mark Attendance -->
 <section id="attendanceSection">
-  <h2>Mark Attendance</h2>
-  <input type="date" id="attDate">
-  <button class="btn" onclick="loadStudentsForAttendance()">Load Students</button>
-  <div id="studentList"></div>
+  <h2>Mark Attendance - Advanced Methods</h2>
+  <input type="date" id="attDate" value="">
+  
+  <div class="attendance-methods">
+    <h3>📋 Attendance Methods</h3>
+    
+    <!-- Method 1: Traditional List -->
+    <button class="btn method-btn" onclick="loadTraditionalMethod()">
+      📝 Traditional List Method
+    </button>
+    
+    <!-- Method 2: Quick Mark All -->
+    <button class="btn btn-info method-btn" onclick="loadQuickMarkMethod()">
+      ⚡ Quick Mark All Method
+    </button>
+    
+    <!-- Method 3: Roll Number Based -->
+    <button class="btn btn-warning method-btn" onclick="loadRollNumberMethod()">
+      🔢 Roll Number Input Method
+    </button>
+  </div>
+
+  <!-- Traditional Method -->
+  <div id="traditionalMethod" class="hidden">
+    <h4>Traditional List Method</h4>
+    <button class="btn" onclick="loadStudentsForAttendance()">Load Students List</button>
+    <div id="studentList"></div>
+  </div>
+
+  <!-- Quick Mark Method -->
+  <div id="quickMarkMethod" class="hidden">
+    <h4>Quick Mark All Method</h4>
+    <div class="quick-actions">
+      <button class="btn present" onclick="markAllPresent()">✅ Mark All Present</button>
+      <button class="btn absent" onclick="markAllAbsent()">❌ Mark All Absent</button>
+    </div>
+    <div id="quickMarkList"></div>
+  </div>
+
+  <!-- Roll Number Method -->
+  <div id="rollNumberMethod" class="hidden">
+    <h4>Roll Number Input Method</h4>
+    <p>Enter roll numbers of absent students (comma separated):</p>
+    <input type="text" id="absentRollNumbers" placeholder="e.g., 101, 105, 108">
+    <button class="btn" onclick="markAttendanceByRollNumbers()">Mark Attendance</button>
+    <p id="rollMethodMsg"></p>
+  </div>
+
   <button class="btn" onclick="saveAttendance()">💾 Save Attendance</button>
   <p id="attMsg"></p>
-</section>
-
-<!-- 🗑️ Delete Attendance -->
-<section id="deleteAttendanceSection">
-  <h2>🗓️ Delete Attendance by Date</h2>
-  <input type="date" id="deleteDate">
-  <button class="btn" onclick="deleteAttendance()">🗑️ Delete Attendance</button>
-  <p id="deleteMsg"></p>
 </section>
 
 <!-- 📊 Attendance Report -->
 <section id="reportSection">
   <h2>Attendance Report & Fines</h2>
   <button class="btn" onclick="generateReport()">📄 Generate Report</button>
+  <button class="btn btn-danger" onclick="deleteAllAttendanceAndFines()">🗑️ Delete All Attendance Report & Fines</button>
   <table>
-    <thead><tr><th>Roll</th><th>Name</th><th>Present</th><th>Absent</th><th>Total</th><th>%</th><th>Fine (Rs)</th><th>Action</th></tr></thead>
+    <thead><tr><th>Roll</th><th>Name</th><th>Present</th><th>Absent</th><th>Total</th><th>%</th><th>Fine (Rs)</th><th>Actions</th></tr></thead>
     <tbody id="reportTable"></tbody>
   </table>
 </section>
@@ -113,6 +165,12 @@ const db = getDatabase(app);
 const adminRef = ref(db, "admin/code");
 get(adminRef).then(snap => { if (!snap.exists()) set(adminRef, "6457"); });
 
+// Set today's date as default
+document.getElementById('attDate').valueAsDate = new Date();
+
+// Global variables
+let currentStudents = [];
+
 // Section Switch
 window.showSection=id=>{
   document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
@@ -125,7 +183,7 @@ window.adminLogin=async()=>{
   const snap=await get(ref(db,"admin/code"));
   const real=snap.exists()?snap.val():"6457";
   if(code===real){
-    document.querySelectorAll("#studentBtn,#attendanceBtn,#reportBtn,#logoutBtn,#deleteAttBtn").forEach(b=>b.classList.remove("hidden"));
+    document.querySelectorAll("#studentBtn,#attendanceBtn,#reportBtn,#logoutBtn").forEach(b=>b.classList.remove("hidden"));
     loginMsg.textContent="✅ Login Successful!";
     showSection("addStudentSection");
     loadStudentList();
@@ -134,7 +192,7 @@ window.adminLogin=async()=>{
 
 // 🚪 Logout
 window.adminLogout=()=>{
-  document.querySelectorAll("#studentBtn,#attendanceBtn,#reportBtn,#logoutBtn,#deleteAttBtn").forEach(b=>b.classList.add("hidden"));
+  document.querySelectorAll("#studentBtn,#attendanceBtn,#reportBtn,#logoutBtn").forEach(b=>b.classList.add("hidden"));
   showSection("loginSection");
 };
 
@@ -173,13 +231,29 @@ window.deleteStudent=async(roll)=>{
   }
 };
 
-// 📋 Load Students for Attendance
+// Hide all method containers
+function hideAllMethods() {
+  document.getElementById('traditionalMethod').classList.add('hidden');
+  document.getElementById('quickMarkMethod').classList.add('hidden');
+  document.getElementById('rollNumberMethod').classList.add('hidden');
+}
+
+// 📋 Traditional Method
+window.loadTraditionalMethod = () => {
+  hideAllMethods();
+  document.getElementById('traditionalMethod').classList.remove('hidden');
+};
+
+// 📋 Load Students for Traditional Attendance
 window.loadStudentsForAttendance=async()=>{
   const snap=await get(child(ref(db),"students"));
   if(!snap.exists())return studentList.innerHTML="<p>No Students Found!</p>";
+  
+  currentStudents = [];
   let html=`<table><tr><th>Roll</th><th>Name</th><th>Status</th></tr>`;
   snap.forEach(s=>{
     const st=s.val();
+    currentStudents.push(st);
     html+=`<tr><td>${st.roll}</td><td>${st.name}</td>
       <td><select id="att_${st.roll}">
         <option value="Present">Present</option>
@@ -190,28 +264,129 @@ window.loadStudentsForAttendance=async()=>{
   studentList.innerHTML=html;
 };
 
-// 💾 Save Attendance
+// ⚡ Quick Mark Method
+window.loadQuickMarkMethod = async () => {
+  hideAllMethods();
+  document.getElementById('quickMarkMethod').classList.remove('hidden');
+  
+  const snap = await get(child(ref(db), "students"));
+  if (!snap.exists()) return quickMarkList.innerHTML = "<p>No Students Found!</p>";
+  
+  currentStudents = [];
+  let html = `<table><tr><th>Roll</th><th>Name</th><th>Status</th><th>Quick Actions</th></tr>`;
+  snap.forEach(s => {
+    const st = s.val();
+    currentStudents.push(st);
+    html += `<tr>
+      <td>${st.roll}</td>
+      <td>${st.name}</td>
+      <td><span id="status_${st.roll}">Present</span></td>
+      <td>
+        <div class="status-btns">
+          <button class="btn present status-btn" onclick="setStudentStatus('${st.roll}', 'Present')">✅</button>
+          <button class="btn absent status-btn" onclick="setStudentStatus('${st.roll}', 'Absent')">❌</button>
+        </div>
+      </td>
+    </tr>`;
+  });
+  html += "</table>";
+  quickMarkList.innerHTML = html;
+};
+
+// Set individual student status in quick mark method
+window.setStudentStatus = (roll, status) => {
+  document.getElementById(`status_${roll}`).textContent = status;
+  document.getElementById(`status_${roll}`).style.color = status === 'Present' ? 'green' : 'red';
+  document.getElementById(`status_${roll}`).style.fontWeight = 'bold';
+};
+
+// Mark all students present
+window.markAllPresent = () => {
+  currentStudents.forEach(student => {
+    setStudentStatus(student.roll, 'Present');
+  });
+};
+
+// Mark all students absent
+window.markAllAbsent = () => {
+  currentStudents.forEach(student => {
+    setStudentStatus(student.roll, 'Absent');
+  });
+};
+
+// 🔢 Roll Number Method
+window.loadRollNumberMethod = () => {
+  hideAllMethods();
+  document.getElementById('rollNumberMethod').classList.remove('hidden');
+};
+
+// Mark attendance by roll numbers
+window.markAttendanceByRollNumbers = async () => {
+  const absentRollsInput = document.getElementById('absentRollNumbers').value.trim();
+  const absentRolls = absentRollsInput.split(',').map(roll => roll.trim()).filter(roll => roll !== '');
+  
+  const snap = await get(child(ref(db), "students"));
+  if (!snap.exists()) {
+    document.getElementById('rollMethodMsg').textContent = "❌ No students found!";
+    return;
+  }
+  
+  currentStudents = [];
+  snap.forEach(s => {
+    currentStudents.push(s.val());
+  });
+  
+  // Mark all as present first, then mark specified rolls as absent
+  currentStudents.forEach(student => {
+    const isAbsent = absentRolls.includes(student.roll);
+    if (isAbsent) {
+      setStudentStatus(student.roll, 'Absent');
+    } else {
+      setStudentStatus(student.roll, 'Present');
+    }
+  });
+  
+  document.getElementById('rollMethodMsg').textContent = `✅ Attendance marked! ${absentRolls.length} students marked as absent.`;
+};
+
+// 💾 Save Attendance (Universal for all methods)
 window.saveAttendance=async()=>{
   const date=document.getElementById("attDate").value;
   if(!date)return attMsg.textContent="⚠ Please select a date!";
-  const snap=await get(child(ref(db),"students"));
-  if(!snap.exists())return attMsg.textContent="⚠ No Students!";
+  
+  if(currentStudents.length === 0){
+    attMsg.textContent="⚠ Please load students first using one of the methods!";
+    return;
+  }
+  
   const saves=[];
-  snap.forEach(s=>{
-    const st=s.val();
-    const status=document.getElementById("att_"+st.roll).value;
-    saves.push(set(ref(db,"attendance/"+date+"/"+st.roll),{roll:st.roll,name:st.name,status}));
+  currentStudents.forEach(student=>{
+    let status = "Present"; // default
+    
+    // Check which method is active and get status accordingly
+    if(!document.getElementById('traditionalMethod').classList.contains('hidden')){
+      // Traditional method
+      const selectElement = document.getElementById("att_"+student.roll);
+      if(selectElement) status = selectElement.value;
+    } else {
+      // Quick mark or roll number method
+      const statusElement = document.getElementById("status_"+student.roll);
+      if(statusElement) status = statusElement.textContent;
+    }
+    
+    saves.push(set(ref(db,"attendance/"+date+"/"+student.roll),{
+      roll:student.roll,
+      name:student.name,
+      status
+    }));
   });
+  
   await Promise.all(saves);
-  attMsg.textContent="✅ Attendance Saved!";
-};
-
-// 🗑️ Delete Attendance by Date
-window.deleteAttendance=async()=>{
-  const date=document.getElementById("deleteDate").value;
-  if(!date)return deleteMsg.textContent="⚠ Please select a date!";
-  await remove(ref(db,"attendance/"+date));
-  deleteMsg.textContent="🗑️ Attendance deleted for "+date;
+  attMsg.textContent="✅ Attendance Saved Successfully!";
+  
+  // Reset forms
+  document.getElementById('absentRollNumbers').value = '';
+  document.getElementById('rollMethodMsg').textContent = '';
 };
 
 // 📊 Generate Report
@@ -232,22 +407,46 @@ window.generateReport=async()=>{
       }
     });
     const percent=total?((present/total)*100).toFixed(1):0;
-    const fineVal=fineSnap.exists()&&fineSnap.val()[s.roll]?fineSnap.val()[s.roll].amount:"";
+    
+    // Calculate fine: Rs. 10 per absence
+    const calculatedFine = absent * 10;
+    
+    // Get existing fine if any, otherwise use calculated fine
+    const fineVal=fineSnap.exists()&&fineSnap.val()[s.roll]?fineSnap.val()[s.roll].amount:calculatedFine;
+    
     reportTable.innerHTML+=`
     <tr>
       <td>${s.roll}</td><td>${s.name}</td><td>${present}</td><td>${absent}</td>
       <td>${total}</td><td>${percent}%</td>
-      <td><input type='number' id='fine_${s.roll}' value='${fineVal||""}' placeholder='0'></td>
-      <td><button class='btn' onclick='saveFine("${s.roll}")'>💰 Save</button></td>
+      <td><input type='number' id='fine_${s.roll}' value='${fineVal}' placeholder='0' readonly></td>
+      <td>
+        <button class='btn btn-pay' onclick='payFine("${s.roll}")'>💰 Pay</button>
+      </td>
     </tr>`;
   });
 };
 
-// 💰 Save Fine
-window.saveFine=async(roll)=>{
-  const fine=document.getElementById("fine_"+roll).value||0;
-  await set(ref(db,"fines/"+roll),{amount:fine});
-  alert("✅ Fine Updated!");
+// 💰 Pay Fine (Reset to zero)
+window.payFine=async(roll)=>{
+  if(confirm(`Are you sure you want to mark the fine as paid for roll number ${roll}?`)){
+    await set(ref(db,"fines/"+roll),{amount:0});
+    alert("✅ Fine marked as paid!");
+    generateReport(); // Refresh the report
+  }
+};
+
+// 🗑️ Delete All Attendance and Fines
+window.deleteAllAttendanceAndFines=async()=>{
+  if(confirm("⚠️ Are you sure you want to delete ALL attendance records and fines? This action cannot be undone!")){
+    try {
+      await remove(ref(db, "attendance"));
+      await remove(ref(db, "fines"));
+      alert("✅ All attendance records and fines have been deleted!");
+      generateReport(); // Refresh the report table
+    } catch (error) {
+      alert("❌ Error deleting data: " + error.message);
+    }
+  }
 };
 
 // 🌍 Public Attendance (with fine shown)
@@ -264,7 +463,7 @@ window.viewPublicAttendance=async()=>{
 
   const attSnap=await get(child(ref(db),"attendance"));
   const fineSnap=await get(child(ref(db),"fines/"+roll));
-  let fine=fineSnap.exists()?fineSnap.val().amount:0;
+  
   let total=0,present=0,absent=0,rows="";
   if(attSnap.exists()){
     attSnap.forEach(day=>{
@@ -284,6 +483,11 @@ window.viewPublicAttendance=async()=>{
     publicOutput.innerHTML="❌ No Attendance Record Found!";
     return;
   }
+
+  // Calculate fine: Rs. 10 per absence
+  const calculatedFine = absent * 10;
+  // Get existing fine if any, otherwise use calculated fine
+  let fine = fineSnap.exists() ? fineSnap.val().amount : calculatedFine;
 
   const percent=((present/total)*100).toFixed(1);
   publicOutput.innerHTML=`
