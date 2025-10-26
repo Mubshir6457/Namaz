@@ -35,6 +35,8 @@ th{background:#c8e6c9;}
 .absent{background:#f44336;}
 .quick-actions{margin:10px 0;}
 .bulk-actions{margin:15px 0;padding:10px;background:#fff3e0;border-radius:5px;}
+.public-summary{background:#e3f2fd;padding:15px;border-radius:8px;margin:10px 0;}
+.summary-item{margin:5px 0;font-size:16px;}
 </style>
 </head>
 <body>
@@ -139,7 +141,6 @@ th{background:#c8e6c9;}
 <section id="publicViewSection">
   <h2>📅 Public Attendance View</h2>
   <input type="text" id="searchRoll" placeholder="Enter Roll Number">
-  <input type="month" id="searchMonth">
   <button class="btn" onclick="viewPublicAttendance()">🔍 View Attendance</button>
   <div id="publicOutput"></div>
 </section>
@@ -449,11 +450,13 @@ window.deleteAllAttendanceAndFines=async()=>{
   }
 };
 
-// 🌍 Public Attendance (with fine shown)
+// 🌍 Public Attendance (Simplified - No month required, no status table)
 window.viewPublicAttendance=async()=>{
   const roll=document.getElementById("searchRoll").value.trim();
-  const month=document.getElementById("searchMonth").value;
-  if(!roll || !month){publicOutput.innerHTML="⚠ Enter Roll & Month!";return;}
+  if(!roll){
+    publicOutput.innerHTML="⚠ Please enter Roll Number!";
+    return;
+  }
 
   const studentSnap=await get(ref(db,"students/"+roll));
   if(!studentSnap.exists()){
@@ -464,17 +467,13 @@ window.viewPublicAttendance=async()=>{
   const attSnap=await get(child(ref(db),"attendance"));
   const fineSnap=await get(child(ref(db),"fines/"+roll));
   
-  let total=0,present=0,absent=0,rows="";
+  let total=0,present=0,absent=0;
   if(attSnap.exists()){
     attSnap.forEach(day=>{
-      const dateKey=day.key;
-      if(dateKey.startsWith(month)){
-        const rec=day.val()[roll];
-        if(rec){
-          total++;
-          if(rec.status==="Present")present++; else absent++;
-          rows+=`<tr><td>${dateKey}</td><td>${rec.status}</td></tr>`;
-        }
+      const rec=day.val()[roll];
+      if(rec){
+        total++;
+        if(rec.status==="Present")present++; else absent++;
       }
     });
   }
@@ -490,17 +489,18 @@ window.viewPublicAttendance=async()=>{
   let fine = fineSnap.exists() ? fineSnap.val().amount : calculatedFine;
 
   const percent=((present/total)*100).toFixed(1);
+  
   publicOutput.innerHTML=`
-  <h3>📘 Attendance Report</h3>
-  <p><b>Name:</b> ${studentSnap.val().name}</p>
-  <p><b>Roll:</b> ${roll}</p>
-  <p><b>Month:</b> ${month}</p>
-  <p><b>Present:</b> ${present}</p>
-  <p><b>Absent:</b> ${absent}</p>
-  <p><b>Total Days:</b> ${total}</p>
-  <p><b>Attendance %:</b> ${percent}%</p>
-  <p><b>Fine:</b> Rs ${fine}</p>
-  <table><thead><tr><th>Date</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>`;
+  <div class="public-summary">
+    <h3>📘 Attendance Summary</h3>
+    <div class="summary-item"><b>Name:</b> ${studentSnap.val().name}</div>
+    <div class="summary-item"><b>Roll Number:</b> ${roll}</div>
+    <div class="summary-item"><b>Total Days:</b> ${total}</div>
+    <div class="summary-item"><b>Present Days:</b> ${present}</div>
+    <div class="summary-item"><b>Absent Days:</b> ${absent}</div>
+    <div class="summary-item"><b>Attendance Percentage:</b> ${percent}%</div>
+    <div class="summary-item"><b>Total Fine:</b> Rs ${fine}</div>
+  </div>`;
 };
 </script>
 </body>
